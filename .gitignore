@@ -31,5 +31,8 @@ Thumbs.db
 
 # Docker
 .dockerignore
-# Optional: keep docker-compose but ignore local data
+# Docker Local Data
 vendora-db-data/
+
+# Scripts
+switch-git.ps1

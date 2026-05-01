@@ -1,6 +1,6 @@
 # 🚀 Vendora Monorepo
 
-Welcome to **Vendora**, the ultimate multi-vendor marketplace platform. This repository contains the entire stack, orchestrated with Docker for the backend and Turborepo for the frontend.
+Welcome to **Vendora**, the ultimate multi-vendor marketplace platform. This repository contains the entire stack, orchestrated with Docker for the backend and Turborepo for the frontend..
 
 ---
 
