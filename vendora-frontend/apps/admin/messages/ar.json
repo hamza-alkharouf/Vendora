@@ -1,0 +1,18 @@
+{
+  "Navigation": {
+    "dashboard": "لوحة التحكم",
+    "stores": "المتاجر",
+    "users": "المستخدمين",
+    "settings": "الإعدادات"
+  },
+  "Dashboard": {
+    "title": "نظرة عامة على السوق",
+    "stats": {
+      "sales": "إجمالي المبيعات",
+      "stores": "المتاجر النشطة",
+      "customers": "عملاء جدد",
+      "orders": "الطلبات"
+    },
+    "revenueGrowth": "نمو الإيرادات"
+  }
+}

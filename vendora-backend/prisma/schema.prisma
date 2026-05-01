@@ -1,0 +1,220 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+enum StoreStatus {
+  PENDING_APPROVAL
+  OPEN
+  SUSPENDED
+  TERMINATED
+}
+
+enum MemberRole {
+  OWNER
+  MANAGER
+}
+
+enum SubscriptionType {
+  FIXED
+  COMMISSION
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+}
+
+enum PaymentMethod {
+  COD
+  IBURAQ
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum AdTier {
+  PREMIUM
+  STANDARD
+}
+
+model User {
+  id        String   @id @default(uuid())
+  phone     String   @unique
+  name      String?
+  role      UserRole @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders       Order[]
+  storeMembers StoreMember[]
+}
+
+model Store {
+  id           String      @id @default(uuid())
+  name         String
+  status       StoreStatus @default(PENDING_APPROVAL)
+  iburaqIban   String?
+  contactPhone String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  products      Product[]
+  subOrders     SubOrder[]
+  shippingRates ShippingRate[]
+  members       StoreMember[]
+  subscription  StoreSubscription?
+}
+
+model StoreMember {
+  id      String     @id @default(uuid())
+  userId  String
+  storeId String
+  role    MemberRole @default(OWNER)
+
+  user  User  @relation(fields: [userId], references: [id])
+  store Store @relation(fields: [storeId], references: [id])
+
+  @@unique([userId, storeId])
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  storeId     String
+  title       Json
+  description Json?
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  store       Store        @relation(fields: [storeId], references: [id])
+  orderItems  OrderItem[]
+  adSchedules AdSchedule[]
+}
+
+model AdSchedule {
+  id           String   @id @default(uuid())
+  productId    String
+  tier         AdTier   @default(STANDARD)
+  startDate    DateTime
+  endDate      DateTime
+  excludedDays Int[] // 0-6 for Sun-Sat
+  pricePaid    Float
+
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model SubscriptionPlan {
+  id              String           @id @default(uuid())
+  name            String
+  type            SubscriptionType
+  monthlyPrice    Float
+  commissionRate  Float            @default(0)
+  monthsFree      Int              @default(0)
+
+  subscriptions StoreSubscription[]
+}
+
+model StoreSubscription {
+  id            String             @id @default(uuid())
+  storeId       String             @unique
+  planId        String
+  status        SubscriptionStatus @default(ACTIVE)
+  endDate       DateTime
+  isGracePeriod Boolean            @default(false)
+
+  store Store            @relation(fields: [storeId], references: [id])
+  plan  SubscriptionPlan @relation(fields: [planId], references: [id])
+}
+
+model ShippingZone {
+  id   String @id @default(uuid())
+  name String @unique
+
+  shippingRates ShippingRate[]
+  orders        Order[]
+}
+
+model ShippingRate {
+  id      String @id @default(uuid())
+  storeId String
+  zoneId  String
+  price   Float
+
+  store Store        @relation(fields: [storeId], references: [id])
+  zone  ShippingZone @relation(fields: [zoneId], references: [id])
+
+  @@unique([storeId, zoneId])
+}
+
+model Order {
+  id             String        @id @default(uuid())
+  customerId     String
+  shippingZoneId String
+  paymentMethod  PaymentMethod
+  iburaqProofUrl String?
+  totalPrice     Float
+  status         OrderStatus   @default(PENDING)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  customer User         @relation(fields: [customerId], references: [id])
+  zone     ShippingZone @relation(fields: [shippingZoneId], references: [id])
+  subOrders SubOrder[]
+}
+
+model SubOrder {
+  id                 String      @id @default(uuid())
+  orderId            String
+  storeId            String
+  status             OrderStatus @default(PENDING)
+  shippingFeeCharged Float
+  subTotal           Float
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+  store Store @relation(fields: [storeId], references: [id])
+  items OrderItem[]
+}
+
+model OrderItem {
+  id              String @id @default(uuid())
+  subOrderId      String
+  productId       String
+  quantity        Int
+  priceAtPurchase Float
+
+  subOrder SubOrder @relation(fields: [subOrderId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+}
+model AdPricingConfig {
+  tier           AdTier @id
+  basePrice      Float
+  peakMultiplier Float
+  peakDays       Int[] // 0-6 for Sun-Sat
+}
+
+model PeakPriceEvent {
+  id         String   @id @default(uuid())
+  name       String
+  startDate  DateTime
+  endDate    DateTime
+  multiplier Float
+}

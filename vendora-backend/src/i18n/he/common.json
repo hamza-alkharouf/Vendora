@@ -1,0 +1,7 @@
+{
+  "HELLO": "שלום",
+  "ERRORS": {
+    "NOT_FOUND": "המשאב לא נמצא",
+    "UNAUTHORIZED": "גישה לא מורשית"
+  }
+}

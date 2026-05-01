@@ -1,0 +1,7 @@
+{
+  "HELLO": "Hello",
+  "ERRORS": {
+    "NOT_FOUND": "Resource not found",
+    "UNAUTHORIZED": "Unauthorized access"
+  }
+}

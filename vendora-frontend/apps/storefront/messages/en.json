@@ -1,0 +1,14 @@
+{
+  "Home": {
+    "welcome": "Welcome to Vendora",
+    "subtitle": "Shop from the best local stores in one place",
+    "search": "Search for products, stores...",
+    "featuredProducts": "Featured Products",
+    "topStores": "Top Stores"
+  },
+  "Cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is currently empty",
+    "checkout": "Checkout"
+  }
+}

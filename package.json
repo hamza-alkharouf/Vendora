@@ -1,0 +1,11 @@
+{
+  "name": "vendora-root",
+  "private": true,
+  "scripts": {
+    "dev:backend": "docker compose up --build",
+    "dev:frontend": "pnpm --prefix vendora-frontend dev",
+    "dev": "npx concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "down": "docker compose down",
+    "install:all": "pnpm install --prefix vendora-frontend && pnpm install --prefix vendora-backend"
+  }
+}

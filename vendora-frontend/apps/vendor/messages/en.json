@@ -1,0 +1,34 @@
+{
+  "Navigation": {
+    "overview": "Overview",
+    "products": "My Products",
+    "orders": "Orders",
+    "shipping": "Shipping",
+    "settings": "Settings"
+  },
+  "Dashboard": {
+    "title": "Seller Central",
+    "welcome": "Welcome back! Here is what is happening with your store today.",
+    "stats": {
+      "revenue": "Store Revenue",
+      "orders": "Orders Today",
+      "products": "Active Products",
+      "views": "Store Views"
+    },
+    "recentOrders": "Recent Orders",
+    "orderHistory": "Order History",
+    "table": {
+      "orderId": "Order ID",
+      "customer": "Customer",
+      "total": "Total",
+      "status": "Status",
+      "noOrders": "No orders found yet."
+    }
+  },
+  "Auth": {
+    "login": "Vendor Login",
+    "phone": "Phone Number",
+    "otp": "Verification Code",
+    "verify": "Verify & Continue"
+  }
+}

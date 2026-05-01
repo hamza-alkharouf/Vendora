@@ -1,0 +1,18 @@
+{
+  "Navigation": {
+    "dashboard": "לוח בקרה",
+    "stores": "חנויות",
+    "users": "משתמשים",
+    "settings": "הגדרות"
+  },
+  "Dashboard": {
+    "title": "סקירה כללית של השוק",
+    "stats": {
+      "sales": "סה״כ מכירות",
+      "stores": "חנויות פעילות",
+      "customers": "לקוחות חדשים",
+      "orders": "הזמנות"
+    },
+    "revenueGrowth": "צמיחת הכנסות"
+  }
+}

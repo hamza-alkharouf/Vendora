@@ -1,0 +1,51 @@
+services:
+  vendora-db:
+    image: postgres:15-alpine
+    container_name: vendora-db
+    environment:
+      POSTGRES_USER: vendora_user
+      POSTGRES_PASSWORD: vendora_password
+      POSTGRES_DB: vendora_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - vendora-db-data:/var/lib/postgresql/data
+    networks:
+      - vendora-network
+
+  vendora-redis:
+    image: redis:7-alpine
+    container_name: vendora-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - vendora-network
+
+  vendora-backend:
+    build:
+      context: ./vendora-backend
+      dockerfile: Dockerfile
+    container_name: vendora-backend
+    ports:
+      - "4000:3000"
+    env_file:
+      - ./vendora-backend/.env
+    environment:
+      DATABASE_URL: postgresql://vendora_user:vendora_password@vendora-db:5432/vendora_db
+      REDIS_HOST: vendora-redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./vendora-backend:/app
+      - /app/node_modules
+    depends_on:
+      - vendora-db
+      - vendora-redis
+    networks:
+      - vendora-network
+
+networks:
+  vendora-network:
+    driver: bridge
+
+volumes:
+  vendora-db-data:

@@ -1,0 +1,18 @@
+{
+  "Navigation": {
+    "dashboard": "Dashboard",
+    "stores": "Stores",
+    "users": "Users",
+    "settings": "Settings"
+  },
+  "Dashboard": {
+    "title": "Marketplace Overview",
+    "stats": {
+      "sales": "Total Sales",
+      "stores": "Active Stores",
+      "customers": "New Customers",
+      "orders": "Orders"
+    },
+    "revenueGrowth": "Revenue Growth"
+  }
+}

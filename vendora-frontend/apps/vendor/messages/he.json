@@ -1,0 +1,34 @@
+{
+  "Navigation": {
+    "overview": "סקירה כללית",
+    "products": "המוצרים שלי",
+    "orders": "הזמנות",
+    "shipping": "משלוח",
+    "settings": "הגדרות"
+  },
+  "Dashboard": {
+    "title": "מרכז המוכרים",
+    "welcome": "ברוך שובך! הנה מה שקורה בחנות שלך היום.",
+    "stats": {
+      "revenue": "הכנסות החנות",
+      "orders": "הזמנות היום",
+      "products": "מוצרים פעילים",
+      "views": "צפיות בחנות"
+    },
+    "recentOrders": "הזמנות אחרונות",
+    "orderHistory": "היסטוריית הזמנות",
+    "table": {
+      "orderId": "מספר הזמנה",
+      "customer": "לקוח",
+      "total": "סה״כ",
+      "status": "סטטוס",
+      "noOrders": "לא נמצאו הזמנות עדיין."
+    }
+  },
+  "Auth": {
+    "login": "כניסת מוכר",
+    "phone": "מספר טלפון",
+    "otp": "קוד אימות",
+    "verify": "אמת והמשך"
+  }
+}
