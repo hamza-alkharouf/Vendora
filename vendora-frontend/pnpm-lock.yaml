@@ -280,6 +280,9 @@ importers:
       '@mantine/notifications':
         specifier: ^9.1.1
         version: 9.1.1(@mantine/core@9.1.1(@mantine/hooks@9.1.1(react@19.2.0))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@mantine/hooks@9.1.1(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
       '@tabler/icons-react':
         specifier: ^3.41.1
         version: 3.41.1(react@19.2.0)

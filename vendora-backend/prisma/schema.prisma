@@ -13,17 +13,22 @@ datasource db {
 enum UserRole {
   ADMIN
   CUSTOMER
+  SELLER
 }
 
 enum StoreStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
   PENDING_APPROVAL
   OPEN
-  SUSPENDED
   TERMINATED
 }
 
 enum MemberRole {
   OWNER
+  ADMIN
+  MEMBER
   MANAGER
 }
 
@@ -54,32 +59,139 @@ enum AdTier {
   STANDARD
 }
 
+enum RequestType {
+  SELLER_REGISTRATION
+  PRODUCT_APPROVAL
+  CATALOG_CHANGE
+  REVIEW_REMOVAL
+  RETURN_REQUEST
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ESCALATED
+  RESOLVED
+}
+
+model MarketplaceRequest {
+  id          String        @id @default(uuid())
+  type        RequestType
+  status      RequestStatus @default(PENDING)
+  submitterId String
+  storeId     String?
+  data        Json
+  adminNotes  String?
+  feedback    String?
+  priority    Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  submitter User   @relation(fields: [submitterId], references: [id])
+  store     Store? @relation(fields: [storeId], references: [id])
+}
+
 model User {
   id        String   @id @default(uuid())
   phone     String   @unique
+  email     String?  @unique
   name      String?
+  firstName String?
+  lastName  String?
   role      UserRole @default(CUSTOMER)
+  metadata  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  orders       Order[]
-  storeMembers StoreMember[]
+  orders         Order[]
+  storeMembers   StoreMember[]
+  addresses      Address[]
+  groups         CustomerGroup[] @relation("UserToGroup")
+  organizationId String?
+  organization   Organization?        @relation(fields: [organizationId], references: [id])
+  submittedRequests MarketplaceRequest[]
+}
+
+model Address {
+  id                String  @id @default(uuid())
+  userId            String
+  firstName         String?
+  lastName          String?
+  company           String?
+  address1          String
+  address2          String?
+  city              String
+  province          String?
+  postalCode        String?
+  countryCode       String
+  phone             String?
+  isDefaultShipping Boolean @default(false)
+  isDefaultBilling  Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model CustomerGroup {
+  id       String @id @default(uuid())
+  name     String @unique
+  metadata Json?
+  users    User[] @relation("UserToGroup")
+}
+
+model Organization {
+  id       String @id @default(uuid())
+  name     String
+  metadata Json?
+  members  User[]
 }
 
 model Store {
-  id           String      @id @default(uuid())
-  name         String
-  status       StoreStatus @default(PENDING_APPROVAL)
-  iburaqIban   String?
-  contactPhone String?
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id              String      @id @default(uuid())
+  name            String
+  handle          String      @unique
+  description     String?     @db.Text
+  status          StoreStatus @default(INACTIVE)
+  iburaqIban      String?
+  contactPhone    String?
+  businessAddress String?
+  taxId           String?
+  logoUrl         String?
+  bannerUrl       String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
   products      Product[]
   subOrders     SubOrder[]
   shippingRates ShippingRate[]
   members       StoreMember[]
   subscription  StoreSubscription?
+  onboarding    StoreOnboarding?
+  invites       MemberInvite[]
+  requests      MarketplaceRequest[]
+}
+
+model StoreOnboarding {
+  id                String  @id @default(uuid())
+  storeId           String  @unique
+  storeInformation  Boolean @default(false)
+  stripeConnection  Boolean @default(false)
+  locationsShipping Boolean @default(false)
+  products          Boolean @default(false)
+
+  store Store @relation(fields: [storeId], references: [id])
+}
+
+model MemberInvite {
+  id        String     @id @default(uuid())
+  email     String
+  role      MemberRole
+  token     String     @unique
+  expiresAt DateTime
+  storeId   String
+  store     Store      @relation(fields: [storeId], references: [id])
+  invitedBy String
+  createdAt DateTime   @default(now())
 }
 
 model StoreMember {

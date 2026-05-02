@@ -20,15 +20,15 @@ export class AdsService {
     });
 
     if (!config) {
-      throw new BadRequestException(`No pricing configuration found for tier: ${tier}`);
+      throw new BadRequestException(
+        `No pricing configuration found for tier: ${tier}`,
+      );
     }
 
     // 2. Fetch overlapping events from DB
     const events = await this.prisma.peakPriceEvent.findMany({
       where: {
-        OR: [
-          { startDate: { lte: end }, endDate: { gte: start } },
-        ],
+        OR: [{ startDate: { lte: end }, endDate: { gte: start } }],
       },
     });
 
@@ -111,5 +111,3 @@ export class AdsService {
     });
   }
 }
-
-

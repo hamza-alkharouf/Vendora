@@ -6,9 +6,11 @@ export class StoresService {
   constructor(private prisma: PrismaService) {}
 
   async createStore(userId: string, name: string) {
+    const handle = name.toLowerCase().replace(/ /g, '-');
     return this.prisma.store.create({
       data: {
         name,
+        handle,
         members: {
           create: {
             userId,
@@ -26,6 +28,17 @@ export class StoresService {
           some: {
             userId,
           },
+        },
+      },
+    });
+  }
+
+  async findAll() {
+    return this.prisma.store.findMany({
+      include: {
+        onboarding: true,
+        _count: {
+          select: { products: true, members: true },
         },
       },
     });

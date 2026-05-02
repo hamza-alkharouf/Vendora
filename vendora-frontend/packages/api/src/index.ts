@@ -23,5 +23,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export const auth = {
+  requestOtp: (phone: string) => api.post('/auth/request-otp', { phone }),
+  verifyOtp: (phone: string, otp: string) => api.post('/auth/verify-otp', { phone, otp }),
+  getMe: () => api.get('/customer/me'),
+};
+
 export * from './types';
 export default api;

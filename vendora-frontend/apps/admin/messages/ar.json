@@ -2,7 +2,10 @@
   "Navigation": {
     "dashboard": "لوحة التحكم",
     "stores": "المتاجر",
+    "sellers": "البائعين",
     "users": "المستخدمين",
+    "requests": "الطلبات والطلبات",
+    "customers": "العملاء",
     "settings": "الإعدادات"
   },
   "Dashboard": {

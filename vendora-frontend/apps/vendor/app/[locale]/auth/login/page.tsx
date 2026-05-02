@@ -1,15 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { TextInput, Button, PinInput, Stack, Text, Group, ActionIcon, Transition } from '@mantine/core';
+import { TextInput, Button, PinInput, Stack, Text, Group, ActionIcon, Anchor } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconPhone, IconArrowLeft } from '@tabler/icons-react';
 import { AuthLayout } from '@repo/ui/layouts/auth-layout';
 import { notifications } from '@mantine/notifications';
+import { auth } from '@repo/api';
+import { useAuth } from '@repo/ui';
+import { useRouter, useParams } from 'next/navigation';
 
-export default function LoginPage() {
+export default function VendorLoginPage() {
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
 
   const phoneForm = useForm({
     initialValues: { phone: '' },
@@ -20,32 +27,39 @@ export default function LoginPage() {
 
   const handleRequestOtp = async (values: typeof phoneForm.values) => {
     setLoading(true);
-    // TODO: Call API /auth/request-otp
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await auth.requestOtp(values.phone);
       setStep('otp');
       notifications.show({
         title: 'OTP Sent',
         message: `A verification code has been sent to ${values.phone}`,
         color: 'teal',
       });
-    }, 1500);
+    } catch (err) {
+      notifications.show({ title: 'Error', message: 'Failed to send OTP', color: 'red' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerifyOtp = async (otp: string) => {
     if (otp.length !== 4) return;
     setLoading(true);
-    // TODO: Call API /auth/verify-otp
-    setTimeout(() => {
+    try {
+      await login(phoneForm.values.phone, otp);
+      notifications.show({ title: 'Success', message: 'Welcome back!', color: 'teal' });
+      router.push(`/${locale}`);
+    } catch (err) {
+      notifications.show({ title: 'Error', message: 'Invalid code', color: 'red' });
+    } finally {
       setLoading(false);
-      window.location.href = '/'; // Redirect to dashboard
-    }, 1500);
+    }
   };
 
   return (
     <AuthLayout 
-      title="Admin Login" 
-      subtitle={step === 'phone' ? 'Enter your phone number to receive an OTP' : 'Enter the 4-digit code sent to your phone'}
+      title="Vendor Login" 
+      subtitle={step === 'phone' ? 'Access your seller dashboard' : 'Enter the code to verify your store access'}
     >
       {step === 'phone' ? (
         <form onSubmit={phoneForm.onSubmit(handleRequestOtp)}>
@@ -58,8 +72,11 @@ export default function LoginPage() {
               size="md"
             />
             <Button type="submit" loading={loading} size="md" fullWidth color="vendora">
-              Get Started
+              Login to Seller Central
             </Button>
+            <Text size="xs" ta="center" c="dimmed">
+              New to Vendora? <Anchor size="xs" fw={700}>Register your store</Anchor>
+            </Text>
           </Stack>
         </form>
       ) : (
@@ -83,9 +100,9 @@ export default function LoginPage() {
              variant="light" 
              fullWidth 
              loading={loading} 
-             onClick={() => handleVerifyOtp('1234')} // Demo purposes
+             onClick={() => handleVerifyOtp('1234')}
           >
-            Verify Code
+            Verify & Continue
           </Button>
         </Stack>
       )}

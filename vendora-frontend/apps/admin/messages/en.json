@@ -2,7 +2,10 @@
   "Navigation": {
     "dashboard": "Dashboard",
     "stores": "Stores",
+    "sellers": "Sellers",
     "users": "Users",
+    "requests": "Requests",
+    "customers": "Customers",
     "settings": "Settings"
   },
   "Dashboard": {

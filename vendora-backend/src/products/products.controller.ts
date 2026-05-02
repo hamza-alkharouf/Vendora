@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ActiveUser } from '../auth/interfaces/active-user.interface';
-import { GetUser } from '../auth/decorators/get-user.decorator';
+import { StoreMemberGuard } from '../auth/guards/store-member.guard';
 
 @Controller('products')
+@UseGuards(JwtAuthGuard, StoreMemberGuard)
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
@@ -22,7 +22,12 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   async create(
     @Headers('x-store-id') storeId: string,
-    @Body() data: { title: Record<string, string>; description?: Record<string, string>; price: number },
+    @Body()
+    data: {
+      title: Record<string, string>;
+      description?: Record<string, string>;
+      price: number;
+    },
   ) {
     return this.productsService.create(storeId, data);
   }
@@ -43,7 +48,11 @@ export class ProductsController {
     @Param('id') id: string,
     @Headers('x-store-id') storeId: string,
     @Body()
-    data: Partial<{ title: Record<string, string>; description: Record<string, string>; price: number }>,
+    data: Partial<{
+      title: Record<string, string>;
+      description: Record<string, string>;
+      price: number;
+    }>,
   ) {
     return this.productsService.update(id, storeId, data);
   }

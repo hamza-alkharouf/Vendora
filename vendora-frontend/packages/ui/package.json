@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+    ".": "./src/index.ts",
     "./*": "./src/*.tsx"
   },
   "scripts": {
@@ -20,6 +21,7 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
+    "@repo/api": "workspace:*",
     "@mantine/core": "^9.1.1",
     "@mantine/dates": "^9.1.1",
     "@mantine/form": "^9.1.1",

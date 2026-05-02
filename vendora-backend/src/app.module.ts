@@ -11,6 +11,9 @@ import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { ShippingModule } from './shipping/shipping.module';
 import { AdsModule } from './ads/ads.module';
+import { SellerModule } from './seller/seller.module';
+import { CustomerModule } from './customer/customer.module';
+import { RequestModule } from './request/request.module';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { AdsModule } from './ads/ads.module';
     OrdersModule,
     ShippingModule,
     AdsModule,
+    SellerModule,
+    CustomerModule,
+    RequestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

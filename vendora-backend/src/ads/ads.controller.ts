@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Body, UseGuards, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  UseGuards,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AdsService } from './ads.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -15,7 +23,13 @@ export class AdsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   async updateConfig(
-    @Body() dto: { tier: AdTier; basePrice: number; peakMultiplier: number; peakDays: number[] }
+    @Body()
+    dto: {
+      tier: AdTier;
+      basePrice: number;
+      peakMultiplier: number;
+      peakDays: number[];
+    },
   ) {
     // Logic to upsert config (moved to service)
     return this.adsService.upsertConfig(dto);
@@ -25,7 +39,13 @@ export class AdsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   async createEvent(
-    @Body() dto: { name: string; startDate: string; endDate: string; multiplier: number }
+    @Body()
+    dto: {
+      name: string;
+      startDate: string;
+      endDate: string;
+      multiplier: number;
+    },
   ) {
     return this.adsService.createEvent(dto);
   }

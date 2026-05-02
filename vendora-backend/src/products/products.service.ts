@@ -8,7 +8,11 @@ export class ProductsService {
 
   async create(
     storeId: string,
-    data: { title: Record<string, string>; description?: Record<string, string>; price: number },
+    data: {
+      title: Record<string, string>;
+      description?: Record<string, string>;
+      price: number;
+    },
   ): Promise<Product> {
     return this.prisma.product.create({
       data: {
@@ -33,7 +37,11 @@ export class ProductsService {
   async update(
     id: string,
     storeId: string,
-    data: Partial<{ title: Record<string, string>; description: Record<string, string>; price: number }>,
+    data: Partial<{
+      title: Record<string, string>;
+      description: Record<string, string>;
+      price: number;
+    }>,
   ): Promise<Product> {
     await this.findOne(id); // Ensure exists
     return this.prisma.product.update({

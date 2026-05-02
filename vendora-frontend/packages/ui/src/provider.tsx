@@ -16,5 +16,3 @@ export function MantineProvider({ children }: { children: React.ReactNode }) {
     </BaseMantineProvider>
   );
 }
-
-export { ColorSchemeScript };
